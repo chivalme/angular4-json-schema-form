@@ -282,7 +282,7 @@ export class JsonValidators {
    * @return {IValidatorFn}
    */
   static format(
-    format: 'date-time' | 'email' | 'hostname' | 'ipv4' | 'ipv6' | 'uri' | 'url' | 'color'
+    format: 'date-time' | 'email' | 'hostname' | 'ipv4' | 'ipv6' | 'uri' | 'url' | 'color' | 'pesel'
   ): IValidatorFn {
     return (control: AbstractControl, invert: boolean = false): PlainObject => {
       if (isEmpty(control.value)) { return null; }
@@ -317,6 +317,25 @@ export class JsonValidators {
             break;
           case 'color':
             isValid = !!actualValue.match(/^#[A-Fa-f0-9]{6}$/);
+            break;
+          case 'pesel':
+            isValid = !!( () => {
+              const reg = /^[0-9][0-9][0-3][0-9][0-3][0-9]{6}$/
+              
+              if (!reg.test(actualValue)) {
+                return false;
+              }
+
+              const dig = ("" + actualValue).split("");
+
+              let kontrola = (1 * parseInt(dig[0]) + 3 * parseInt(dig[1]) + 7 * parseInt(dig[2]) + 9 * parseInt(dig[3]) + 1 * parseInt(dig[4]) + 3 * parseInt(dig[5]) + 7 * parseInt(dig[6]) + 9 * parseInt(dig[7]) + 1 * parseInt(dig[8]) + 3 * parseInt(dig[9])) % 10;
+
+              kontrola = !kontrola ? 10 : kontrola;
+
+              kontrola = 10 - kontrola;
+
+              return parseInt(dig[10]) === kontrola;
+            })();
             break;
           default:
             console.error(`format validator error: "${format}" is not a recognized format.`);

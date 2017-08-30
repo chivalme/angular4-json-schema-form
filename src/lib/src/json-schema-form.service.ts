@@ -200,6 +200,24 @@ export class JsonSchemaFormService {
         delete this.schema.properties['ui:order'];
       }
       this.validateFormData = this.ajv.compile(this.schema);
+
+      this.ajv.addFormat("pesel", (actualValue) => {
+        const reg = /^[0-9][0-9][0-3][0-9][0-3][0-9]{6}$/
+        
+        if (!reg.test(actualValue)) {
+          return false;
+        }
+
+        const dig = ("" + actualValue).split("");
+
+        let kontrola = (1 * parseInt(dig[0]) + 3 * parseInt(dig[1]) + 7 * parseInt(dig[2]) + 9 * parseInt(dig[3]) + 1 * parseInt(dig[4]) + 3 * parseInt(dig[5]) + 7 * parseInt(dig[6]) + 9 * parseInt(dig[7]) + 1 * parseInt(dig[8]) + 3 * parseInt(dig[9])) % 10;
+
+        kontrola = !kontrola ? 10 : kontrola;
+
+        kontrola = 10 - kontrola;
+
+        return parseInt(dig[10]) === kontrola;
+      });
     }
   }
 
