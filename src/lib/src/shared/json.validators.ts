@@ -282,7 +282,7 @@ export class JsonValidators {
    * @return {IValidatorFn}
    */
   static format(
-    format: 'date-time' | 'email' | 'hostname' | 'ipv4' | 'ipv6' | 'uri' | 'url' | 'color' | 'pesel'
+    format: 'date-time' | 'email' | 'hostname' | 'ipv4' | 'ipv6' | 'uri' | 'url' | 'color' | 'pesel' | 'nip' | 'regon' | 'peselRegon' | 'money'
   ): IValidatorFn {
     return (control: AbstractControl, invert: boolean = false): PlainObject => {
       if (isEmpty(control.value)) { return null; }
@@ -336,6 +336,59 @@ export class JsonValidators {
 
               return parseInt(dig[10]) === kontrola;
             })();
+            break;
+          case 'nip':
+            let verificator_nip = new Array(6, 5, 7, 2, 3, 4, 5, 6, 7);
+            let nip = actualValue.replace(/[\ \-]/gi, '');
+            if(nip.length != 10) {
+                isValid = false;
+            } else {
+                let n = 0;
+                for(let i = 0; i < 9; i++) {
+                  n += +nip[i] * verificator_nip[i];
+                }
+                n %= 11;
+                if(n != +nip[9]) {
+                  isValid = false;
+                }else{
+                  isValid = true;
+                }
+            }
+            break;
+          case 'regon':
+            let reg = /^[0-9]{9}$/;
+            if(reg.test(actualValue) == false) {
+                isValid = false;
+            } else {
+                let dig = ("" + actualValue)
+                    .split("");
+                let kontrola = (8 * parseInt(dig[0]) + 9 * parseInt(dig[1]) + 2 * parseInt(dig[2]) + 3 * parseInt(dig[3]) + 4 * parseInt(dig[4]) + 5 * parseInt(dig[5]) + 6 * parseInt(dig[6]) + 7 * parseInt(dig[7])) % 11;
+                if(kontrola == 10) kontrola = 0;
+                isValid = parseInt(dig[8]) == kontrola;
+            }
+            break;
+          case 'peselRegon':
+            var reg1 = /^[0-9]{9}$/;
+            if(reg.test(actualValue) !== false) {
+                var dig = ("" + actualValue)
+                    .split("");
+                var kontrola = (1 * parseInt(dig[0]) + 3 * parseInt(dig[1]) + 7 * parseInt(dig[2]) + 9 * parseInt(dig[3]) + 1 * parseInt(dig[4]) + 3 * parseInt(dig[5]) + 7 * parseInt(dig[6]) + 9 * parseInt(dig[7]) + 1 * parseInt(dig[8]) + 3 * parseInt(dig[9])) % 10;
+                if(kontrola == 0) kontrola = 10;
+                kontrola = 10 - kontrola;
+                isValid = parseInt(dig[10]) == kontrola;
+            } else if(reg1.test(actualValue) !== false) {
+                var dig = ("" + actualValue)
+                    .split("");
+                var kontrola = (8 * parseInt(dig[0]) + 9 * parseInt(dig[1]) + 2 * parseInt(dig[2]) + 3 * parseInt(dig[3]) + 4 * parseInt(dig[4]) + 5 * parseInt(dig[5]) + 6 * parseInt(dig[6]) + 7 * parseInt(dig[7])) % 11;
+                if(kontrola == 10) kontrola = 0;
+                isValid = parseInt(dig[8]) == kontrola;
+            }else{
+              isValid = true;
+            }
+            break;
+          case 'money':
+            let regexp = /^\d+(?:\.\d{1,2})?$/;
+            isValid = regexp.test(actualValue) != false;
             break;
           default:
             console.error(`format validator error: "${format}" is not a recognized format.`);

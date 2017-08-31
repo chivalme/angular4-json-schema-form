@@ -218,6 +218,65 @@ export class JsonSchemaFormService {
 
         return parseInt(dig[10]) === kontrola;
       });
+
+      this.ajv.addFormat("nip", function (value) {
+        var verificator_nip = new Array(6, 5, 7, 2, 3, 4, 5, 6, 7);
+        var nip = value.replace(/[\ \-]/gi, '');
+        if(nip.length != 10) {
+            return false;
+        } else {
+            var n = 0;
+            for(var i = 0; i < 9; i++) {
+                n += nip[i] * verificator_nip[i];
+            }
+            n %= 11;
+            if(n != nip[9]) {
+                return false;
+            }
+        }
+        return true;
+      });
+
+      this.ajv.addFormat("regon", function (regon) {
+        var reg = /^[0-9]{9}$/;
+        if(reg.test(regon) == false) {
+            return false;
+        } else {
+            var dig = ("" + regon)
+                .split("");
+            var kontrola = (8 * parseInt(dig[0]) + 9 * parseInt(dig[1]) + 2 * parseInt(dig[2]) + 3 * parseInt(dig[3]) + 4 * parseInt(dig[4]) + 5 * parseInt(dig[5]) + 6 * parseInt(dig[6]) + 7 * parseInt(dig[7])) % 11;
+            if(kontrola == 10) kontrola = 0;
+            return parseInt(dig[8]) == kontrola;
+        }
+      });
+
+      this.ajv.addFormat("peselRegon", function (peselRegon) {
+        //var reg = /^[0-9]{11}$/;
+        var reg = /^[0-9][0-9][0-3][0-9][0-3][0-9]{6}$/;
+        var reg1 = /^[0-9]{9}$/;
+        if(reg.test(peselRegon) !== false) { //test na pesel
+            var dig = ("" + peselRegon)
+                .split("");
+            var kontrola = (1 * parseInt(dig[0]) + 3 * parseInt(dig[1]) + 7 * parseInt(dig[2]) + 9 * parseInt(dig[3]) + 1 * parseInt(dig[4]) + 3 * parseInt(dig[5]) + 7 * parseInt(dig[6]) + 9 * parseInt(dig[7]) + 1 * parseInt(dig[8]) + 3 * parseInt(dig[9])) % 10;
+            if(kontrola == 0) kontrola = 10;
+            kontrola = 10 - kontrola;
+            return parseInt(dig[10]) == kontrola;
+        } else if(reg1.test(peselRegon) !== false) { //test na regon
+            var dig = ("" + peselRegon)
+                .split("");
+            var kontrola = (8 * parseInt(dig[0]) + 9 * parseInt(dig[1]) + 2 * parseInt(dig[2]) + 3 * parseInt(dig[3]) + 4 * parseInt(dig[4]) + 5 * parseInt(dig[5]) + 6 * parseInt(dig[6]) + 7 * parseInt(dig[7])) % 11;
+            if(kontrola == 10) kontrola = 0;
+            return parseInt(dig[8]) == kontrola;
+        }
+        return false;
+      });
+      
+      this.ajv.addFormat("money", function (money) {
+        var reg = /^\d+(?:\.\d{1,2})?$/;
+        return reg.test(money) != false;
+      });
+
+      
     }
   }
 
