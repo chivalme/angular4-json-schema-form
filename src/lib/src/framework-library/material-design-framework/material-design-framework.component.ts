@@ -12,7 +12,8 @@ import { toTitleCase } from '../../shared';
       [formID]="formID"
       [layoutNode]="layoutNode"
       [dataIndex]="dataIndex"
-      [layoutIndex]="layoutIndex"></select-widget-widget>
+      [layoutIndex]="layoutIndex"
+      [data]="data"></select-widget-widget>
   `,
 })
 export class MaterialDesignFrameworkComponent implements OnInit, OnChanges {
@@ -24,6 +25,7 @@ export class MaterialDesignFrameworkComponent implements OnInit, OnChanges {
   widgetOptions: any; // Options passed to child widget
   layoutPointer: string;
   formControl: any = null;
+  @Input() data: any;
   @Input() formID: number;
   @Input() layoutNode: any;
   @Input() layoutIndex: number[];

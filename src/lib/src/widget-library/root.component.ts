@@ -81,7 +81,6 @@ export class RootComponent {
   isConditionallyShown(layoutItem: any): boolean {
     let result: boolean = true;
     if (this.data && hasOwn(layoutItem, 'condition')) {
-      console.log(layoutItem);
       const model = this.data;
 
       /* tslint:disable */

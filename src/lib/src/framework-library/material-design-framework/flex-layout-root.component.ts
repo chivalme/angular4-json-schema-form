@@ -1,4 +1,7 @@
-import { Component, Input } from '@angular/core';
+
+ import { Component, Input, Host } from '@angular/core';
+ import { hasOwn } from '../../shared/utility.functions';
+ import { JsonSchemaFormComponent } from '../../json-schema-form.component';
 
 @Component({
   selector: 'flex-layout-root-widget',
@@ -21,10 +24,12 @@ import { Component, Input } from '@angular/core';
       [fxFlexAlign]="(layoutItem.options || {}).fxFlexAlign">
 
       <select-framework-widget
+        *ngIf="isConditionallyShown(layoutItem)"
         [formID]="formID"
         [dataIndex]="layoutItem?.arrayItem ? (dataIndex || []).concat(i) : (dataIndex || [])"
         [layoutIndex]="(layoutIndex || []).concat(i)"
-        [layoutNode]="layoutItem"></select-framework-widget>
+        [layoutNode]="layoutItem"
+        [data]="data"></select-framework-widget>
 
     </div>`,
   styles: [`
@@ -51,12 +56,14 @@ import { Component, Input } from '@angular/core';
 })
 export class FlexLayoutRootComponent {
   options: any;
+  parentComponent: JsonSchemaFormComponent;
   @Input() formID: number;
   @Input() dataIndex: number[];
   @Input() layoutIndex: number[];
   @Input() layout: any[];
   @Input() isOrderable: boolean;
   @Input() isFlexItem: boolean = false;
+  @Input() data: any;
 
   isDraggable(node: any): boolean {
     return this.isOrderable !== false && node.type !== '$ref' &&
@@ -74,5 +81,17 @@ export class FlexLayoutRootComponent {
 
   trackByItem(layoutItem: any) {
     return layoutItem && layoutItem._id;
+  }
+
+  isConditionallyShown(layoutItem: any): boolean {
+    let result: boolean = true;
+    if (this.data && hasOwn(layoutItem, 'condition')) {
+      const model = this.data;
+
+      /* tslint:disable */
+      eval('result = ' + layoutItem.condition);
+      /* tslint:enable */
+    }
+    return result;
   }
 }

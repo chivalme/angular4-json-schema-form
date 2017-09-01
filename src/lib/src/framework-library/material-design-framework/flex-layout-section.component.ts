@@ -19,6 +19,7 @@ import { Component, Input, OnInit } from '@angular/core';
           [layout]="layoutNode.items"
           [dataIndex]="dataIndex"
           [layoutIndex]="layoutIndex"
+          [data]="data"
           [isOrderable]="options?.orderable"
           [isFlexItem]="getFlexAttribute('is-flex')"
           [class.form-flex-column]="getFlexAttribute('flex-direction') === 'column'"
@@ -55,6 +56,7 @@ import { Component, Input, OnInit } from '@angular/core';
           [dataIndex]="dataIndex"
           [layoutIndex]="layoutIndex"
           [isOrderable]="options?.orderable"
+          [data]="data"
           [isFlexItem]="getFlexAttribute('is-flex')"
           [class.form-flex-column]="getFlexAttribute('flex-direction') === 'column'"
           [class.form-flex-row]="getFlexAttribute('flex-direction') === 'row'"
@@ -80,13 +82,13 @@ export class FlexLayoutSectionComponent implements OnInit {
   options: any;
   expanded: boolean = true;
   containerType: string;
+  @Input() data: any;
   @Input() formID: number;
   @Input() layoutNode: any;
   @Input() layoutIndex: number[];
   @Input() dataIndex: number[];
 
   ngOnInit() {
-console.log(this.layoutNode.type);
     switch (this.layoutNode.type) {
       case 'fieldset': case 'advancedfieldset': case 'authfieldset':
       case 'optionfieldset': case 'selectfieldset':

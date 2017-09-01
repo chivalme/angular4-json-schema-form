@@ -48,13 +48,13 @@ If you want detailed documentation describing the individual functions used in t
 If, after playing with the examples, you decide this library is functional enough to use in your own project, you can [install it from NPM](https://www.npmjs.com/package/angular2-json-schema-form) using either [NPM](https://www.npmjs.com) or [Yarn](https://yarnpkg.com). To install with NPM, run the following from your terminal:
 
 ```shell
-npm install angular2-json-schema-form --save
+npm install angular4-json-schema-form --save
 ```
 
 Then import JsonSchemaFormModule in your main application module:
 
 ```javascript
-import { JsonSchemaFormModule } from 'angular2-json-schema-form';
+import { JsonSchemaFormModule } from 'angular4-json-schema-form';
 ```
 
 And finally, add `JsonSchemaFormModule` to the `imports` array in your @NgModule declaration.
@@ -65,7 +65,7 @@ Your final app.module.ts should look something like this:
 import { NgModule }             from '@angular/core';
 import { BrowserModule }        from '@angular/platform-browser';
 
-import { JsonSchemaFormModule } from 'angular2-json-schema-form';
+import { JsonSchemaFormModule } from 'angular4-json-schema-form';
 
 import { AppComponent }         from './app.component';
 
@@ -91,7 +91,7 @@ Add these lines to the 'map' section of systemjs.config.js, if they do not alrea
 ```javascript
 '@angular/animations':       'npm:@angular/animations/bundles/animations.umd.js',
 '@angular/material':         'npm:@angular/material/bundles/material.umd.js',
-'angular2-json-schema-form': 'npm:angular2-json-schema-form/bundles/angular2-json-schema-form.umd.js',
+'angular4-json-schema-form': 'npm:angular4-json-schema-form/bundles/angular4-json-schema-form.umd.js',
 'ajv':                       'npm:ajv/dist/ajv.min.js',
 'lodash':                    'npm:lodash/lodash.min.js'
 ```
@@ -280,7 +280,7 @@ let yourNewWidgets = {
 ```
 ...or...
 ```javascript
-import { WidgetLibraryService } from 'angular2-json-schema-form';
+import { WidgetLibraryService } from 'angular4-json-schema-form';
 ...
 constructor(private widgetLibrary: WidgetLibraryService) { }
 ...
@@ -316,7 +316,7 @@ let yourCustomFramework = {
 ```
 ...or...
 ```javascript
-import { FrameworkLibraryService } from 'angular2-json-schema-form';
+import { FrameworkLibraryService } from 'angular4-json-schema-form';
 ...
 constructor(private frameworkLibrary: FrameworkLibraryService) { }
 ...
