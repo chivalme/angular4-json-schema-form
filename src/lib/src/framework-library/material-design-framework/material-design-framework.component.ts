@@ -129,7 +129,7 @@ export class MaterialDesignFrameworkComponent implements OnInit, OnChanges {
           this.controlType = 'button';
         break;
 
-        case 'fieldset': case 'conditional':    case 'actions':
+        case 'fieldset':     case 'actions':
         case 'array':    case 'authfieldset':   case 'optionfieldset':
         case 'tab':      case 'selectfieldset': case 'advancedfieldset':
         case 'section':  case 'wizard':
