@@ -515,10 +515,18 @@ export function updateInputOptions(layoutNode: any, schema: any, jsf: any) {
       jsf.formGroupTemplate, templatePointer + '/value/value'
     );
     if (hasValue(layoutNodeValue) && layoutNodeValue !== templateValue) {
-      jsf.formGroupTemplate = JsonPointer.set(
-        jsf.formGroupTemplate, templatePointer + '/value/value', layoutNodeValue
-      );
+      try{
+        console.log(layoutNodeValue);
+        jsf.formGroupTemplate.controls.coowners.controls.forEach(element => {
+          element.controls.ownerType.value = layoutNodeValue;
+        });
+      }catch(e){
+        jsf.formGroupTemplate = JsonPointer.set(
+          jsf.formGroupTemplate, templatePointer + '/value/value', layoutNodeValue
+        );
+      }
     }
+
     delete layoutNode.value;
     delete layoutNode.default;
   }

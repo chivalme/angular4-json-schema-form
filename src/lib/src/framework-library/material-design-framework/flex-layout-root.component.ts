@@ -87,11 +87,13 @@ export class FlexLayoutRootComponent {
     let result: boolean = true;
     if (this.data && hasOwn(layoutItem, 'condition')) {
       const model = this.data;
+      const arrayIndex = 0;
 
       /* tslint:disable */
       eval('result = ' + layoutItem.condition);
       /* tslint:enable */
     }
+
     return result;
   }
 }
