@@ -7,6 +7,7 @@ import {
   SchemaPrimitiveType, PlainObject, IValidatorFn, AsyncIValidatorFn
 } from './validator.functions';
 import { forEachCopy } from './utility.functions';
+import * as VIN from 'vehicle-identification-number';
 
 /**
  * 'JsonValidators' class
@@ -282,7 +283,7 @@ export class JsonValidators {
    * @return {IValidatorFn}
    */
   static format(
-    format: 'date-time' | 'email' | 'hostname' | 'ipv4' | 'ipv6' | 'uri' | 'url' | 'color' | 'pesel' | 'nip' | 'regon' | 'peselRegon' | 'money'
+    format: 'date-time' | 'email' | 'hostname' | 'ipv4' | 'ipv6' | 'uri' | 'url' | 'color' | 'pesel' | 'nip' | 'regon' | 'peselRegon' | 'money' | 'vin'
   ): IValidatorFn {
     return (control: AbstractControl, invert: boolean = false): PlainObject => {
       if (isEmpty(control.value)) { return null; }
@@ -389,6 +390,9 @@ export class JsonValidators {
           case 'money':
             let regexp = /^\d+(?:\.\d{1,2})?$/;
             isValid = regexp.test(actualValue) != false;
+            break;
+          case 'vin':
+            isValid = VIN.hasValidChecksum(actualValue) && actualValue.length==17;
             break;
           default:
             console.error(`format validator error: "${format}" is not a recognized format.`);

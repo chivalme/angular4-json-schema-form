@@ -18,6 +18,8 @@ import {
   buildFormGroup, buildFormGroupTemplate, fixJsonFormOptions, formatFormData, getControl
 } from './shared/form-group.functions';
 import { buildLayout } from './shared/layout.functions';
+import * as VIN from 'vehicle-identification-number';
+
 
 export type CheckboxItem = { name: string, value: any, checked?: boolean };
 
@@ -199,8 +201,6 @@ export class JsonSchemaFormService {
         this.schema['ui:order'] = this.schema.properties['ui:order'];
         delete this.schema.properties['ui:order'];
       }
-      this.validateFormData = this.ajv.compile(this.schema);
-
       this.ajv.addFormat("pesel", (actualValue) => {
         const reg = /^[0-9][0-9][0-3][0-9][0-3][0-9]{6}$/
         
@@ -217,6 +217,10 @@ export class JsonSchemaFormService {
         kontrola = 10 - kontrola;
 
         return parseInt(dig[10]) === kontrola;
+      });
+
+      this.ajv.addFormat("vin", function (value) {
+        return VIN.hasValidChecksum(value) && value.length==17;
       });
 
       this.ajv.addFormat("nip", function (value) {
@@ -276,7 +280,7 @@ export class JsonSchemaFormService {
         return reg.test(money) != false;
       });
 
-      
+      this.validateFormData = this.ajv.compile(this.schema);
     }
   }
 
